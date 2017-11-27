@@ -123,17 +123,20 @@ public class MainActivity extends AppCompatActivity
 
         DataSnapshot childSnapshot = dataSnapshot.child("title");
         String title = (String) childSnapshot.getValue();
-        this.adapter.remove (title);
+        this.adapter.remove(title);
     }
 
     @Override
-    public void onChildChanged(DataSnapshot dataSnapshot, String s) { }
+    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+    }
 
     @Override
-    public void onChildMoved(DataSnapshot dataSnapshot, String s) { }
+    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+    }
 
     @Override
-    public void onCancelled(DatabaseError databaseError) { }
+    public void onCancelled(DatabaseError databaseError) {
+    }
 
     // private helper methods
     private void loadLogInView() {
