@@ -17,8 +17,9 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
-    protected EditText edittextPassword;
     protected EditText edittextEMail;
+    protected EditText edittextPassword;
+    protected EditText edittextPasswordRepeated;
     protected Button buttonSignUp;
     protected TextView textviewLogIn;
     private FirebaseAuth firebaseAuth;
@@ -32,8 +33,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         this.firebaseAuth = FirebaseAuth.getInstance();
 
         // retrieve references of controls
-        this.edittextPassword = (EditText) this.findViewById(R.id.passwordField);
         this.edittextEMail = (EditText) this.findViewById(R.id.emailField);
+        this.edittextPassword = (EditText) this.findViewById(R.id.passwordField);
+        this.edittextPasswordRepeated = (EditText) this.findViewById(R.id.passwordFieldRepeated);
         this.buttonSignUp = (Button) this.findViewById(R.id.signupButton);
         this.textviewLogIn = (TextView) this.findViewById(R.id.loginText);
 
@@ -54,12 +56,13 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         } else if (view == this.buttonSignUp) {
 
-            String password = this.edittextPassword.getText().toString();
             String email = this.edittextEMail.getText().toString();
+            String password = this.edittextPassword.getText().toString();
+            String passwordRepeated = this.edittextPasswordRepeated.getText().toString();
             password = password.trim();
             email = email.trim();
 
-            if (password.isEmpty() || email.isEmpty()) {
+            if (email.isEmpty() || password.isEmpty() || passwordRepeated.isEmpty()) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
                 builder.setMessage(R.string.signup_error_message)
@@ -67,6 +70,18 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         .setPositiveButton(android.R.string.ok, null);
                 AlertDialog dialog = builder.create();
                 dialog.show();
+            }
+            else if (! password.equals(passwordRepeated)) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
+                builder.setMessage(R.string.signup_error_message2)
+                        .setTitle(R.string.signup_error_title)
+                        .setPositiveButton(android.R.string.ok, null);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                this.edittextPassword.setText("");
+                this.edittextPasswordRepeated.setText("");
+                this.edittextPassword.requestFocus();
             } else {
                 Task<AuthResult> task = this.firebaseAuth.createUserWithEmailAndPassword(email, password);
                 task.addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
